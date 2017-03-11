@@ -1,0 +1,58 @@
+<snippet>
+	<content><![CDATA[
+bool bfs(list<ll>graph[],map<pll,ll>residual,bool visited[],ll parent[],ll v,ll t)
+{
+	queue<ll> q;
+	q.push(v);
+	while(!q.empty())
+	{
+		ll v=q.front();q.pop();
+		visited[v]=true;
+		for(auto&u:graph[v]){
+			if(!visited[u]&&residual[mp(v,u)]>0){
+				q.push(u);
+				parent[u]=v;
+			}
+		}
+	}
+	return (visited[t]==true);
+}
+
+int max_flow(list<ll>graph[],map<pll,ll>residual,ll s,ll t)
+{
+	ll parent[n+1],bottle_neck,maxflow=0,u,v,i;
+	clr(parent);
+	bool visited[n+1]={false};
+
+	while(bfs(graph,residual,visited,parent,s,t))
+	{
+		v=t;bottle_neck=INT_MAX;
+		while(v!=s)
+		{
+			u=parent[v];
+			cout<<endl<<u<<","<<v<<":"<<residual[mp(u,v)];//cin>>l;
+			bottle_neck=min(bottle_neck,residual[mp(u,v)]);
+			v=u;
+		}
+		v=t;
+		while(v!=s)
+		{
+			u=parent[v];
+			residual[mp(u,v)]-=bottle_neck;
+			if(residual[mp(v,u)]==0)
+				graph[v].pb(u);
+			residual[mp(v,u)]+=bottle_neck;
+			v=u;
+		}
+		maxflow+=bottle_neck;
+		clr(parent);
+		memset(visited,false,sizeof(visited));
+	}
+	return maxflow;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	 <tabTrigger>max_flow</tabTrigger> 
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
