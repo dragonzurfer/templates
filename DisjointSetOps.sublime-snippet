@@ -1,0 +1,77 @@
+<snippet>
+	<content><![CDATA[
+#include <bits/stdc++.h>
+using namespace std;
+#define mp make_pair
+#define pb push_back
+#define vll vector<ll>
+#define F first
+#define S second
+#define pll pair<ll,ll>
+#define FOR1(i,a) for(i=0;i<=a;i++)
+#define FOR2(i,a,b) for(i=a;i<=b;i++)
+#define endl '\n'
+#define clr(a) memset(a,0,sizeof(a))
+#define all(x) x.begin(),x.end()
+typedef long long ll;
+
+void make_set(vector<ll> &id, vector<ll> &rank, ll n) {
+    for(ll i=1; i<=n; i++) {
+        id[i] = i;
+        rank[i] = 1;
+    }
+}
+
+ll find_set(vector<ll> &id, ll p) {
+    ll root = p;
+    //find the root
+    while(root != id[root]) {
+        root = id[root];
+    }
+    //perform path compression
+    while(p != root) {
+        ll newp = id[p];
+        id[p] = root;
+        p = newp;
+    }
+    return root;
+}
+
+void merge_set(vector<ll> &id, vector<ll> &rank, ll x, ll y) {
+    x = find_set(id, x);
+    y = find_set(id, y);
+    if(rank[x] > rank[y])
+        id[y] = x;
+    else
+        id[x] = y;
+    if(rank[x] == rank[y])
+        rank[y] += 1;
+}
+
+int main()
+{
+	ll n,res=0,e,i;cin>>n>>e;
+	vector<ll> rank(n+1), id(n+1);
+	make_set(id,rank,n);
+	FOR1(i,n-1)
+	{
+		ll u,v;
+		cin>>u>>v;
+		if(find_set(id,u)!=find_set(id,v))
+		merge_set(id,rank,u,v);
+
+	}
+	for(i=1;i<=n;i++) {
+	    if(id[i] == i)
+	        res++;
+	
+	}
+	cout<<res<<endl;
+	return 0;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>disjoinset</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
