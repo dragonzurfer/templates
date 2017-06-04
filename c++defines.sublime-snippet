@@ -4,6 +4,8 @@
 using namespace std;
 #define mp make_pair
 #define pb push_back
+#define lb lower_bound
+#define up upper_bound
 #define vll vector<ll>
 #define G vector<vll >
 #define F first
@@ -14,8 +16,15 @@ using namespace std;
 #define endl '\n'
 #define clr(a) memset(a,0,sizeof(a))
 #define all(x) x.begin(),x.end()
+#ifndef ONLINE_JUDGE
+#define gc getchar
+#define pc putchar
+#else
+#define gc getchar_unlocked
+#define pc putchar_unlocked
+#endif
 typedef long long ll;
-
+ll read_ll(){charc=gc();while((c<'0'||c>'9')&&c!='-')c=gc();llret=0;int neg=0;if(c=='-')neg=1,c=gc();while(c>='0'&&c<='9'){ret=10*ret+c-48;c=gc();}returnneg?-ret:ret;}
 
 int main()
 {
