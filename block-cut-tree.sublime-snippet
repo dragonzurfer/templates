@@ -1,0 +1,81 @@
+<snippet>
+	<content><![CDATA[
+vector<pll>g[N];
+vector<int>tree[N];     
+int dp[N][LN],visited[N],lvl[N],depth[N],pre[N],isbridge[N],block[N],start[N],finish[N];
+queue<int>q[N];
+int t =0 ;
+void getbridges(int u,int p)
+{
+  visited[u] = 1;
+  pre[u] = depth[u] = t++;
+  for(auto k:g[u])
+  {
+    int v = k.F;
+    if(v == p)continue;
+    if(visited[v])
+    {
+      depth[u] = min(pre[v],depth[u]);
+    }
+    else
+    {
+      dfs(v,u);
+      depth[u] = min(depth[u],depth[v]);
+      if(depth[v]>pre[u])
+        isbridge[k.S] = 1;
+    }
+  }
+}
+
+int blockno = 1;
+
+void makeblocks(int u,int p)
+{
+  visited[u] = 1;
+  block[u] = blockno;
+  q[block[u]].push(u);
+  while(!q[block[u]].empty())
+  {
+    int uu = q[block[u]].front();q[block[u]].pop();
+    for(auto k:g[uu])
+    {
+      if(visited[k.F])continue;
+      int v = k.F;
+      if(isbridge[k.S])
+      {
+        block[v] = ++blockno;
+        // cout<<" connect block "<<block[u]<<" and block "<<block[v]<<endl;
+        tree[block[u]].pb(block[v]);
+        tree[block[v]].pb(block[u]);
+        dfs2(v,u);
+      }
+      else
+      {
+        visited[v] = 1;
+        block[v] = block[u];
+        q[block[u]].push(v);
+      }
+    }
+  }
+}
+
+void dfstree(int u,int p)
+{
+  FOR(i,1,LN)dp[u][i] = dp[dp[u][i-1]][i-1];
+  start[u] = t++;
+  for(auto v:tree[u])
+  {
+    if(v==p)continue;
+    dp[v][0] = u;
+    lvl[v] = lvl[u] + 1;
+    dfs3(v,u);
+  }
+ finish[u] = t++;
+}
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	 <tabTrigger>blockcut-tree</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
